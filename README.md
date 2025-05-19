@@ -11,6 +11,19 @@ Watch a demo of the AI agent in action:
 
 This project utilizes Python with SDKs for the integrated services.
 
+## Prerequisites 📋
+
+Before you begin, ensure you have the following:
+
+*   **Python:** Version 3.11.2 or higher.
+*   **API Keys & Tokens:**
+    *   Deepgram API Key
+    *   Eleven Labs API Key
+    *   LLM API Key (for OpenAI or your custom LLM)
+    *   Video SDK Room ID
+    *   Video SDK Auth Token (valid for joining a meeting)
+
+
 ## Setup and Running 🚀
 
 Follow these steps to get the project running:
@@ -65,15 +78,3 @@ The core pipeline works as follows:
 
 
 *(Mentioned in the video but not strictly required by the base code: This architecture also supports integration with Vector Databases (Pinecone, Qdrant, Chroma DB) for Retrieval Augmented Generation (RAG) between the STT and LLM steps if you want the agent to reference specific documents or knowledge bases.)*
-
-## Prerequisites 📋
-
-Before you begin, ensure you have the following:
-
-*   **Python:** Version 3.11.2 or higher.
-*   **API Keys & Tokens:**
-    *   Deepgram API Key
-    *   Eleven Labs API Key
-    *   LLM API Key (for OpenAI or your custom LLM)
-    *   Video SDK Room ID
-    *   Video SDK Auth Token (valid for joining a meeting)
