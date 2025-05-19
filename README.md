@@ -1,31 +1,78 @@
-# Voice AI for Interviews 
-Build realtime AI interviewer voice agent that joins meetings. It demonstrates integrating Deepgram (STT), OpenAI (LLM), and Eleven Labs (TTS) via WebRTC for natural conversations.
+
+# Voice AI for Interviews 🗣️
+
+Build a realtime AI interviewer voice agent that joins meetings to assess, engage, and evaluate candidates with precision. This project demonstrates the integration of Deepgram (STT), OpenAI (LLM), and Eleven Labs (TTS) via WebRTC for natural, conversational interactions.
+
 ## Overview
 
-[![AI Agent](https://img.youtube.com/vi/HQZu7Krx0HE/maxresdefault.jpg)](https://www.youtube.com/watch?v=HQZu7Krx0HE)
+Watch a demo of the AI agent in action:
+
+[![AI Agent Demo](https://img.youtube.com/vi/HQZu7Krx0HE/maxresdefault.jpg)](https://www.youtube.com/watch?v=HQZu7Krx0HE)
+
+This project utilizes Python with SDKs for the integrated services.
+
+## Features ✨
+
+*   **Realtime Interaction:** Joins a live meeting and interacts conversationally.
+*   **Speech-to-Text (STT):** Transcribes participant speech using Deepgram (Nova 2 model).
+*   **Large Language Model (LLM):** Generates responses using OpenAI (GPT-4 model), maintaining conversation context.
+*   **Text-to-Speech (TTS):** Converts the AI's responses into natural-sounding speech using Eleven Labs (multilingual V2 model).
+*   **WebRTC Integration:** Uses Video SDK to handle audio streaming in and out of the meeting.
+*   **Customizable:** Easily modify the AI's system prompt and audio processing parameters.
+
+## Architecture 🏗️
+
+The core pipeline works as follows:
+
+1.  The AI agent connects to a meeting using **Video SDK** (built on WebRTC).
+2.  Participant audio streams are consumed by the agent.
+3.  Audio is sent to **Deepgram STT** for real-time transcription.
+4.  The transcribed text (potentially with context) is sent to **OpenAI LLM** to generate a conversational response.
+5.  The LLM's text response is sent to **Eleven Labs TTS** to synthesize audio.
+6.  The synthesized audio is streamed back into the meeting using Video SDK's **Custom Audio Track** feature.
 
 
-ai agents using python sdk
+*(Mentioned in the video but not strictly required by the base code: This architecture also supports integration with Vector Databases (Pinecone, Qdrant, Chroma DB) for Retrieval Augmented Generation (RAG) between the STT and LLM steps if you want the agent to reference specific documents or knowledge bases.)*
 
-# step 1: clone github repo and copy env example file
+## Prerequisites 📋
 
-`git clone https://github.com/videosdk-community/ai-agent.git && cd ai-agent && cp .env.example .env`
+Before you begin, ensure you have the following:
 
-- change environment variable
+*   **Python:** Version 3.11.2 or higher.
+*   **API Keys & Tokens:**
+    *   Deepgram API Key
+    *   Eleven Labs API Key
+    *   LLM API Key (for OpenAI or your custom LLM)
+    *   Video SDK Room ID
+    *   Video SDK Auth Token (valid for joining a meeting)
 
-## install python version >= 3.11.2 and modules
+## Setup and Running 🚀
 
-`python3.11 -m pip install -r requirements.txt`
-or
-`python3 -m pip install requirements.txt`
+Follow these steps to get the project running:
 
-- add flag `break-system-packages` if required.
+**1. Clone the repository and set up environment variables:**
 
-## run the project
+Open your terminal and run the following commands:
 
-`python3.11 main.py`
-
-## Additional
-
-- change variable `system_prompt` as per requirements in file [intelligence_client.py](./intelligence/intelligence_client.py)
-- change vad or utterance constants as per requirements in file [deepgram_stt.py](./stt/deepgram_stt.py)
+- Clone
+```bash
+git clone https://github.com/videosdk-community/ai-agent.git
+```
+- Navigative to *Project Dir*
+```bash
+cd ai-agent
+```
+- Copy Template Configration file
+```bash
+cp .env.example .env
+```
+- Env requirments 
+```bash
+# .env file example
+ROOM_ID="YOUR_MEETING_ROOM_ID"
+AUTH_TOKEN="YOUR_VIDEO_SDK_AUTH_TOKEN" # https://app.videosdk.live/
+DEEPGRAM_API_KEY="YOUR_DEEPGRAM_API_KEY" # https://console.deepgram.com/
+ELEVENLABS_API_KEY="YOUR_ELEVENLABS_API_KEY" # https://elevenlabs.io/app/settings/api-keys
+LLM_API_KEY="YOUR_OPENAI_OR_CUSTOM_LLM_API_KEY" # https://platform.openai.com/api-keys
+LANGUAGE="en" # Or the language code supported by Deepgram (e.g., "es", "fr")
+```
