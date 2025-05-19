@@ -1,4 +1,9 @@
-# Overview
+# Voice AI for Interviews 
+Build realtime AI interviewer voice agent that joins meetings. It demonstrates integrating Deepgram (STT), OpenAI (LLM), and Eleven Labs (TTS) via WebRTC for natural conversations.
+## Overview
+
+[![AI Agent](https://img.youtube.com/vi/HQZu7Krx0HE/maxresdefault.jpg)](https://www.youtube.com/watch?v=HQZu7Krx0HE)
+
 
 ai agents using python sdk
 
@@ -8,7 +13,7 @@ ai agents using python sdk
 
 - change environment variable
 
-# step 2: install python version >= 3.11.2 and modules
+## install python version >= 3.11.2 and modules
 
 `python3.11 -m pip install -r requirements.txt`
 or
@@ -16,11 +21,11 @@ or
 
 - add flag `break-system-packages` if required.
 
-# step 3: run the project
+## run the project
 
 `python3.11 main.py`
 
-# Additional
+## Additional
 
 - change variable `system_prompt` as per requirements in file [intelligence_client.py](./intelligence/intelligence_client.py)
 - change vad or utterance constants as per requirements in file [deepgram_stt.py](./stt/deepgram_stt.py)
