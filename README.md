@@ -11,6 +11,38 @@ Watch a demo of the AI agent in action:
 
 This project utilizes Python with SDKs for the integrated services.
 
+## Setup and Running 🚀
+
+Follow these steps to get the project running:
+
+**1. Clone the repository and set up environment variables:**
+
+Open your terminal and run the following commands:
+
+- Clone
+```bash
+git clone https://github.com/videosdk-community/ai-agent.git
+```
+- Navigative to *Project Dir*
+```bash
+cd ai-agent
+```
+- Copy Template Configration file
+```bash
+cp .env.example .env
+```
+- Env requirments 
+```bash
+# .env file example
+ROOM_ID="YOUR_MEETING_ROOM_ID"
+AUTH_TOKEN="YOUR_VIDEO_SDK_AUTH_TOKEN" # https://app.videosdk.live/
+DEEPGRAM_API_KEY="YOUR_DEEPGRAM_API_KEY" # https://console.deepgram.com/
+ELEVENLABS_API_KEY="YOUR_ELEVENLABS_API_KEY" # https://elevenlabs.io/app/settings/api-keys
+LLM_API_KEY="YOUR_OPENAI_OR_CUSTOM_LLM_API_KEY" # https://platform.openai.com/api-keys
+LANGUAGE="en" # Or the language code supported by Deepgram (e.g., "es", "fr")
+```
+
+
 ## Features ✨
 
 *   **Realtime Interaction:** Joins a live meeting and interacts conversationally.
@@ -45,34 +77,3 @@ Before you begin, ensure you have the following:
     *   LLM API Key (for OpenAI or your custom LLM)
     *   Video SDK Room ID
     *   Video SDK Auth Token (valid for joining a meeting)
-
-## Setup and Running 🚀
-
-Follow these steps to get the project running:
-
-**1. Clone the repository and set up environment variables:**
-
-Open your terminal and run the following commands:
-
-- Clone
-```bash
-git clone https://github.com/videosdk-community/ai-agent.git
-```
-- Navigative to *Project Dir*
-```bash
-cd ai-agent
-```
-- Copy Template Configration file
-```bash
-cp .env.example .env
-```
-- Env requirments 
-```bash
-# .env file example
-ROOM_ID="YOUR_MEETING_ROOM_ID"
-AUTH_TOKEN="YOUR_VIDEO_SDK_AUTH_TOKEN" # https://app.videosdk.live/
-DEEPGRAM_API_KEY="YOUR_DEEPGRAM_API_KEY" # https://console.deepgram.com/
-ELEVENLABS_API_KEY="YOUR_ELEVENLABS_API_KEY" # https://elevenlabs.io/app/settings/api-keys
-LLM_API_KEY="YOUR_OPENAI_OR_CUSTOM_LLM_API_KEY" # https://platform.openai.com/api-keys
-LANGUAGE="en" # Or the language code supported by Deepgram (e.g., "es", "fr")
-```
