@@ -9,7 +9,6 @@ Watch a demo of the AI agent in action:
 
 [![AI Agent Demo](https://img.youtube.com/vi/HQZu7Krx0HE/maxresdefault.jpg)](https://www.youtube.com/watch?v=HQZu7Krx0HE)
 
-This project utilizes Python with SDKs for the integrated services.
 
 ## Prerequisites 📋
 
