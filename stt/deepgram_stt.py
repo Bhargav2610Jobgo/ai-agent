@@ -6,7 +6,7 @@ from deepgram import (
     DeepgramClientOptions,
     LiveTranscriptionEvents,
     LiveOptions,
-    ListenWebSocketClient
+    ListenWebSocketClient,
 )
 from asyncio import AbstractEventLoop, Task
 import numpy as np
@@ -24,14 +24,11 @@ BASE_WPM = 150.0
 VAD_THRESHOLD_MS = 25
 UTTERANCE_CUTOFF_MS = 300
 
+
 class DeepgramSTT(STT):
 
     def __init__(
-        self,
-        loop: AbstractEventLoop,
-        api_key,
-        language,
-        intelligence:Intelligence
+        self, loop: AbstractEventLoop, api_key, language, intelligence: Intelligence
     ) -> None:
         self.loop = loop
 
@@ -51,26 +48,24 @@ class DeepgramSTT(STT):
             config=DeepgramClientOptions(options={"keepalive": True}),
         )
         self.language = language
-        self.deepgram_connections:Dict[str,ListenWebSocketClient] = {}
-        self.audio_tasks:Dict[str, Task] = {}
+        self.deepgram_connections: Dict[str, ListenWebSocketClient] = {}
+        self.audio_tasks: Dict[str, Task] = {}
 
         self.finalize_called: Dict[str, bool] = {}
 
         # intelligence
         self.intelligence = intelligence
-        self.pubsub = None
-    
-    def set_pubsub(self, pubsub):
-        self.pubsub = pubsub
 
-    def start(self, peer_id: str, peer_name: str, stream:Stream):
+    def start(self, peer_id: str, peer_name: str, stream: Stream):
 
         def on_deepgram_stt_text_available(connection, result, **kwargs):
-            self.on_deepgram_stt_text_available(peer_id=peer_id, peer_name=peer_name, result=result)
+            self.on_deepgram_stt_text_available(
+                peer_id=peer_id, peer_name=peer_name, result=result
+            )
 
         def on_utterance_end(connection, utterance_end, **kwargs):
             self.on_utterance_end(peer_id=peer_id, peer_name=peer_name)
-        
+
         def on_open(connection, open, **kwargs):
             self.on_open(peer_id=peer_id, peer_name=peer_name)
 
@@ -79,7 +74,7 @@ class DeepgramSTT(STT):
 
         def on_speech_started(connection, speech_started, **kwargs):
             self.on_speech_started(peer_id=peer_id, peer_name=peer_name)
-            
+
         def on_close(connection, close, **kwargs):
             self.on_close(peer_id=peer_id, peer_name=peer_name)
 
@@ -113,17 +108,11 @@ class DeepgramSTT(STT):
         )
         deepgram_connection.on(LiveTranscriptionEvents.Open, on_open)
         deepgram_connection.on(LiveTranscriptionEvents.Metadata, on_metadata)
-        deepgram_connection.on(
-            LiveTranscriptionEvents.SpeechStarted, on_speech_started
-        )
-        deepgram_connection.on(
-            LiveTranscriptionEvents.UtteranceEnd, on_utterance_end
-        )
+        deepgram_connection.on(LiveTranscriptionEvents.SpeechStarted, on_speech_started)
+        deepgram_connection.on(LiveTranscriptionEvents.UtteranceEnd, on_utterance_end)
         deepgram_connection.on(LiveTranscriptionEvents.Close, on_close)
         deepgram_connection.on(LiveTranscriptionEvents.Error, on_error)
-        deepgram_connection.on(
-            LiveTranscriptionEvents.Unhandled, on_unhandled
-        )
+        deepgram_connection.on(LiveTranscriptionEvents.Unhandled, on_unhandled)
         deepgram_connection.start(
             deepgram_options,
             addons={"no_delay": "true"},
@@ -133,9 +122,7 @@ class DeepgramSTT(STT):
 
         self.finalize_called[peer_id] = False
         self.task = self.loop.create_task(
-            self.add_peer_stream(
-                stream=stream, peer_id=peer_id, peer_name=peer_name
-            )
+            self.add_peer_stream(stream=stream, peer_id=peer_id, peer_name=peer_name)
         )
 
     def stop(self, peer_id):
@@ -143,7 +130,7 @@ class DeepgramSTT(STT):
             print("stop peer audio connection", peer_id)
             self.deepgram_connections[peer_id].finalize()
             self.deepgram_connections[peer_id].finish()
-            self.finalize_called[peer_id] = True    
+            self.finalize_called[peer_id] = True
             del self.deepgram_connections[peer_id]
 
     def get_usage(self):
@@ -186,7 +173,9 @@ class DeepgramSTT(STT):
                 self.buffer = f"{self.buffer} {top_choice.transcript}"
                 print(f"Buffer {self.buffer}")
 
-            if (self.buffer and self.is_endpoint(result)) or self.finalize_called[peer_id]:
+            if (self.buffer and self.is_endpoint(result)) or self.finalize_called[
+                peer_id
+            ]:
 
                 duration_seconds = self.calculate_duration(self.words_buffer)
                 # print("Duration seconds", duration_seconds)
@@ -202,7 +191,6 @@ class DeepgramSTT(STT):
                         self.update_speed_coefficient(wpm=wpm, message=self.buffer)
 
                 self.produce_text(self.buffer, peer_name=peer_name, is_final=True)
-                
 
             if top_choice.transcript and top_choice.confidence > 0.0:
                 if not result.is_final:
@@ -253,14 +241,11 @@ class DeepgramSTT(STT):
             return 0.0
         return words[-1]["end"] - words[0]["start"]
 
-    def produce_text(self, text: str, peer_name:str, is_final: bool = False):
+    def produce_text(self, text: str, peer_name: str, is_final: bool = False):
         try:
             if is_final and text:
                 # peer final message after speech
                 print(f"[{peer_name}]:", text)
-                if self.pubsub is not None:
-                    # publish in meeting
-                    self.pubsub(message=f"[{peer_name}]: {text}")
                 self.intelligence.generate(text=text, sender_name=peer_name)
                 self.buffer = ""
                 self.words_buffer = []

@@ -8,14 +8,20 @@ from videosdk import (
 )
 
 # types
-from videosdk import MeetingConfig, Stream, PubSubPublishConfig
+from videosdk import MeetingConfig, Stream
 from intelligence.intelligence import Intelligence
 from stt.stt import STT
 from videosdk.stream import MediaStreamTrack
 
 
 class AIInterviewer:
-    def __init__(self, loop:asyncio.AbstractEventLoop, audio_track: MediaStreamTrack, stt: STT, intelligence: Intelligence):
+    def __init__(
+        self,
+        loop: asyncio.AbstractEventLoop,
+        audio_track: MediaStreamTrack,
+        stt: STT,
+        intelligence: Intelligence,
+    ):
         self.name = "Interviewer"
         self.loop = loop
         self.meeting: Meeting = None
@@ -37,17 +43,6 @@ class AIInterviewer:
         self.meeting.add_event_listener(MyMeetingEventListener(stt=self.stt))
 
         await self.meeting.async_join()
-
-        self.stt.set_pubsub(pubsub=self.publish_message)
-        self.intelligence.set_pubsub(pubsub=self.publish_message)
-
-    def publish_message(self, message):
-        self.loop.create_task(self.meeting.pubsub.publish(
-            PubSubPublishConfig(
-                topic="CHAT",
-                message=message,
-            )
-        ))
 
     async def leave(self):
         print("leaving meeting...")

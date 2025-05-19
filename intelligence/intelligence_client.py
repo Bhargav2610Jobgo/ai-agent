@@ -4,8 +4,15 @@ from openai.types.chat import ChatCompletionChunk
 from tts.tts import TTS
 from intelligence.intelligence import Intelligence
 
+
 class OpenAIIntelligence(Intelligence):
-    def __init__(self, api_key: str, tts: TTS, base_url: Optional[str]="https://api.openai.com/v1", model: Optional[str] = None):
+    def __init__(
+        self,
+        api_key: str,
+        tts: TTS,
+        base_url: Optional[str] = "https://api.openai.com/v1",
+        model: Optional[str] = None,
+    ):
         self.client = OpenAI(
             base_url=base_url,
             api_key=api_key,
@@ -17,16 +24,13 @@ class OpenAIIntelligence(Intelligence):
         self.chat_history = []
         self.model = model or "gpt-3.5-turbo"
 
-        self.pubsub = None
-    
-    def set_pubsub(self, pubsub):
-        self.pubsub = pubsub
     def build_messages(
         self,
         text: str,
         sender_name: str,
     ):
         # TODO: generate context related to text
+        # RAG
         context = ""
 
         # Build the message
@@ -57,7 +61,7 @@ class OpenAIIntelligence(Intelligence):
 
         # Return local chat history
         return chat_history
-    
+
     def add_response(self, text):
         ai_message = {
             "role": "assistant",
@@ -69,10 +73,10 @@ class OpenAIIntelligence(Intelligence):
         self.chat_history.append(ai_message)
 
     def text_generator(self, response: Stream[ChatCompletionChunk]):
-       for chunk in response:
-          content = chunk.choices[0].delta.content
-          if content:
-            yield content
+        for chunk in response:
+            content = chunk.choices[0].delta.content
+            if content:
+                yield content
 
     def generate(self, text: str, sender_name: str):
         # build old history
@@ -84,7 +88,7 @@ class OpenAIIntelligence(Intelligence):
             messages=messages,
             max_tokens=100,
             temperature=0.5,
-            stream=False
+            stream=False,
         )
         response_text = ""
 
@@ -97,9 +101,6 @@ class OpenAIIntelligence(Intelligence):
         self.tts.generate(text=response_text)
 
         print(f"[Interviewer]: {response_text}")
-        if self.pubsub is not None:
-            # publish in meeting
-            self.pubsub(message=f"[Interviewer]: {response_text}")
 
         # add response to history
         self.add_response(response_text)

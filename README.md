@@ -4,7 +4,7 @@ ai agents using python sdk
 
 # step 1: clone github repo and copy env example file
 
-`git clone https://github.com/videosdk-live/ai-agent.git && cd ai-agent && cp .env.example .env`
+`git clone https://github.com/videosdk-community/ai-agent.git && cd ai-agent && cp .env.example .env`
 
 - change environment variable
 
