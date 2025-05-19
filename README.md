@@ -68,6 +68,8 @@ LANGUAGE="en" # Or the language code supported by Deepgram (e.g., "es", "fr")
 
 The core pipeline works as follows:
 
+![voice ai agent architecture](https://strapi.videosdk.live/uploads/Screenshot_2025_05_19_at_4_37_45_PM_39c9d21bf9.png)
+
 1.  The AI agent connects to a meeting using **Video SDK** (built on WebRTC).
 2.  Participant audio streams are consumed by the agent.
 3.  Audio is sent to **Deepgram STT** for real-time transcription.
